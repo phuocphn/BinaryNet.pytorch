@@ -106,15 +106,17 @@ def main():
 
     # create model
     logging.info("creating model %s", args.model)
-    model = models.__dict__[args.model]
+    # model = models.__dict__[args.model]
+    from models import binaryconnect_binary
+    model = binaryconnect_binary.QBinaryConnectNet
 
-
-    model_config = {'input_size': args.input_size, 'dataset': args.dataset, 'num_classes': output_dim}
+    model_config = { 'num_classes': output_dim}
 
     if args.model_config is not '':
         model_config = dict(model_config, **literal_eval(args.model_config))
     model = model(**model_config)
     logging.info("created model with configuration: %s", model_config)
+    model = nn.DataParallel(model)
     print (model)
     # optionally resume from a checkpoint
     if args.evaluate:
