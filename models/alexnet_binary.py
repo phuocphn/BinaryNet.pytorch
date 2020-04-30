@@ -10,7 +10,7 @@ class AlexNetOWT_BN(nn.Module):
         super(AlexNetOWT_BN, self).__init__()
         self.ratioInfl=3
         self.features = nn.Sequential(
-            BinarizeConv2d(3, int(64*self.ratioInfl), kernel_size=11, stride=4, padding=2),
+            nn.Conv2d(3, int(64*self.ratioInfl), kernel_size=11, stride=4, padding=2),
             nn.MaxPool2d(kernel_size=3, stride=2),
             nn.BatchNorm2d(int(64*self.ratioInfl)),
             nn.Hardtanh(inplace=True),
@@ -42,7 +42,7 @@ class AlexNetOWT_BN(nn.Module):
             nn.BatchNorm1d(4096),
             nn.Hardtanh(inplace=True),
             #nn.Dropout(0.5),
-            BinarizeLinear(4096, num_classes),
+            nn.Linear(4096, num_classes),
             nn.BatchNorm1d(10),
             nn.LogSoftmax()
         )
